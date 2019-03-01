@@ -2,6 +2,11 @@ use std::time::Instant;
 use std::u32;
 
 fn main() {
+    let maybe_here = Option::Some(String::from("419"));
+    let also_maybe_here = Option::None;
+    print_option(&maybe_here);
+    print_option(&also_maybe_here);
+
     let start = Instant::now();
 
     for i in 0..u32::MAX {
@@ -14,6 +19,13 @@ fn main() {
                 println!("Currently processing at rate of {}/sec", (i as u64) / elapsed);
             }
         }
+    }
+}
+
+fn print_option(potential: &Option<String>) {
+    match potential {
+        Option::Some(s) => println!("Echo {}", s),
+        Option::None => println!("Nothing but dust and echoes.. ()")
     }
 }
 
