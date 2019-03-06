@@ -1,0 +1,10 @@
+[package]
+name = "error_handling"
+version = "0.1.0"
+authors = ["Gabe <gabe@gabesaba.com>"]
+edition = "2018"
+
+[profile.release]
+panic = 'abort'
+
+[dependencies]
