@@ -10,12 +10,13 @@ fn main() {
     let h_point = HeterogeneousPoint{ x: 5, y: -5.0};
 }
 
-fn largest<T>(iter: &[T]) -> T {
 
-    let mut largest = iter[0];
-    for i in iter.iter() {
+fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
+    let mut largest = list[0];
+
+    for &i in list.iter() {
         if i > largest {
-            largest = *i
+            largest = i
         }
     }
     largest
