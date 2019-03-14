@@ -7,6 +7,8 @@ pub fn sqrt(a: f64) -> f64 {
     a.sqrt()
 }
 
+// We could run all tests containing "sqrt" by running "cargo test sqrt"
+
 #[cfg(test)]
 mod tests {
     use super::{multiply, sqrt};
@@ -63,5 +65,11 @@ mod tests {
         } else {
             Err("That's not so odd".to_owned())
         }
+    }
+
+    #[test]
+    #[ignore]
+    fn will_ignore() {
+        panic!("We'll ignore this test unless specified using cargo test -- --ignored")
     }
 }
