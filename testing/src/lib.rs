@@ -7,11 +7,21 @@ pub fn sqrt(a: f64) -> f64 {
     a.sqrt()
 }
 
+fn private() {
+    println!("Hello!");
+}
+
 // We could run all tests containing "sqrt" by running "cargo test sqrt"
 
 #[cfg(test)]
 mod tests {
-    use super::{multiply, sqrt};
+    use super::{multiply, sqrt, private};
+
+    // We can test private functions if we so choose!
+    #[test]
+    fn test_private() {
+        private()
+    }
 
     #[test]
     fn eq() {
@@ -34,11 +44,13 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn it_fails() {
         panic!("ahhh what went wrong?!")
     }
 
     #[test]
+    #[ignore]
     fn assert_with_custom_err() {
         assert!(false, "It failed because I asserted false :S")
     }
@@ -59,6 +71,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn test_sqrt_with_bad_result() -> Result<(), String> {
         if sqrt(25.0) == 5.1 {
             Ok(())
