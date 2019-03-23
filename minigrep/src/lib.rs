@@ -1,9 +1,20 @@
+use std::env;
 use std::error::Error;
 use std::fs;
 
 pub fn run(config: &Config) -> Result<(), Box<dyn Error>> {
     let file = fs::read_to_string(&config.filename)?;
-    search(&config.pattern, &file);
+
+    let result;
+    if config.case_insensitive {
+        result = search_insensitive(&config.pattern, &file);
+    } else {
+        result = search(&config.pattern, &file);
+    }
+
+    for line in result {
+        println!("{}", line);
+    }
     Ok(())
 }
 
@@ -17,9 +28,21 @@ fn search<'a>(query: &str, document: &'a str) -> Vec<&'a str> {
     results
 }
 
+fn search_insensitive<'a>(query: &str, document: &'a str) -> Vec<&'a str> {
+    let mut results = Vec::new();
+    let query = query.to_lowercase();
+    for line in document.lines() {
+        if line.to_lowercase().contains(&query) {
+            results.push(line);
+        }
+    }
+    results
+}
+
 pub struct Config {
     pattern: String,
     filename: String,
+    case_insensitive: bool
 }
 
 impl Config {
@@ -29,7 +52,9 @@ impl Config {
                 let pattern = args[1].to_owned();
 
                 let filename = args[2].to_owned();
-                Result::Ok(Config { pattern, filename })
+
+                let case_insensitive = !env::var("CASE_INSENSITIVE").is_err();;
+                Result::Ok(Config { pattern, filename, case_insensitive})
             }
             false => Result::Err("minigrep requires two args"),
         }
@@ -65,6 +90,14 @@ hola";
         for (i, line) in DOCUMENT.split("\n").enumerate() {
             assert_eq!(line, result[i]);
         }
+    }
+
+    #[test]
+    fn test_case_insensitive_match() {
+        let query = "HeLlO";
+        let result = search_insensitive (&query, DOCUMENT);
+        assert_eq!(1, result.len());
+        assert_eq!("hello", result[0]);
     }
 
 }
