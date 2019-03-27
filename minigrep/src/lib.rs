@@ -19,45 +19,49 @@ pub fn run(config: &Config) -> Result<(), Box<dyn Error>> {
 }
 
 fn search<'a>(query: &str, document: &'a str) -> Vec<&'a str> {
-    let mut results = Vec::new();
-    for line in document.lines() {
-        if line.contains(query) {
-            results.push(line);
-        }
-    }
-    results
+    document
+        .lines()
+        .filter(|line| line.contains(query))
+        .collect()
 }
 
 fn search_insensitive<'a>(query: &str, document: &'a str) -> Vec<&'a str> {
-    let mut results = Vec::new();
     let query = query.to_lowercase();
-    for line in document.lines() {
-        if line.to_lowercase().contains(&query) {
-            results.push(line);
-        }
-    }
-    results
+    document
+        .lines()
+        .filter(|line| line.contains(&query))
+        .collect()
 }
 
 pub struct Config {
     pattern: String,
     filename: String,
-    case_insensitive: bool
+    case_insensitive: bool,
 }
 
 impl Config {
-    pub fn new(args: &[String]) -> Result<Config, &'static str> {
-        match args.len() == 3 {
-            true => {
-                let pattern = args[1].to_owned();
+    pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
+        // throw away program name
+        args.next();
 
-                let filename = args[2].to_owned();
+        let pattern = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Missing pattern"),
+        };
 
-                let case_insensitive = !env::var("CASE_INSENSITIVE").is_err();;
-                Result::Ok(Config { pattern, filename, case_insensitive})
-            }
-            false => Result::Err("minigrep requires two args"),
-        }
+        let filename = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Missing filename"),
+        };
+
+        let case_insensitive = !env::var("CASE_INSENSITIVE").is_err();
+        ;
+
+        Result::Ok(Config {
+            pattern,
+            filename,
+            case_insensitive,
+        })
     }
 }
 
@@ -95,9 +99,8 @@ hola";
     #[test]
     fn test_case_insensitive_match() {
         let query = "HeLlO";
-        let result = search_insensitive (&query, DOCUMENT);
+        let result = search_insensitive(&query, DOCUMENT);
         assert_eq!(1, result.len());
         assert_eq!("hello", result[0]);
     }
-
 }
