@@ -1,0 +1,13 @@
+[package]
+name = "release_profiles"
+version = "0.1.0"
+authors = ["Gabe <dev@gabesaba.com>"]
+edition = "2018"
+
+[profile.dev]
+opt-level = 2
+
+[profile.release]
+opt-level = 3
+
+[dependencies]
