@@ -31,7 +31,7 @@ impl NaturalNumber {
     }
 }
 
-pub fn boxes() {
+pub fn run() {
     let b = Box::new(42);
     let a = NaturalNumber::new(*b);
     println!("Created new natural number of size {}", *b);

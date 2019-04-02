@@ -1,7 +1,9 @@
 mod boxes;
 mod deref;
+mod drop;
 
 fn main() {
-    boxes::boxes();
-    deref::deref();
+    boxes::run();
+    deref::run();
+    drop::run();
 }

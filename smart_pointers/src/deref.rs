@@ -1,6 +1,6 @@
 use std::ops::Deref;
 
-pub fn deref() {
+pub fn run() {
     let x = 42;
     let y = MyBox::new(x);
 
