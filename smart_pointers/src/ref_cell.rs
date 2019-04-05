@@ -20,7 +20,7 @@ pub fn run() {
 
     let start = Instant::now();
     let mut results = Vec::new();
-    for _ in 0..25 {
+    for _ in 0..5 {
         results.push(api1.do_something_expensive());
         results.push(api2.do_something_expensive());
     }
